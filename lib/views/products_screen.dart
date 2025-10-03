@@ -88,6 +88,70 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 
+  void _showSyncDialog(BuildContext context) {
+    final syncProvider = Provider.of<SyncProvider>(context, listen: false);
+    final cartController = Provider.of<CartController>(context, listen: false);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Sync Status'),
+        content: Consumer<SyncProvider>(
+          builder: (context, syncProvider, child) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (syncProvider.isSyncing) ...[
+                  Text('Syncing orders...'),
+                  SizedBox(height: 16),
+                  LinearProgressIndicator(
+                    value: syncProvider.syncProgress / 100,
+                  ),
+                  SizedBox(height: 8),
+                  Text('${syncProvider.syncProgress}% complete'),
+                ] else ...[
+                  Icon(
+                    cartController.isOnline ? Icons.wifi : Icons.wifi_off,
+                    size: 40,
+                    color: cartController.isOnline
+                        ? Colors.green
+                        : Colors.orange,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    cartController.isOnline ? 'Online' : 'Offline',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: cartController.isOnline
+                          ? Colors.green
+                          : Colors.orange,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text('Pending orders: ${syncProvider.pendingOrdersCount}'),
+                ],
+              ],
+            );
+          },
+        ),
+        actions: [
+          if (!Provider.of<SyncProvider>(context).isSyncing)
+            TextButton(
+              onPressed: () {
+                syncProvider.syncNow();
+                Navigator.pop(context);
+              },
+              child: Text('SYNC NOW'),
+            ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('CLOSE'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildOfflineIndicator() {
     return Consumer<CartController>(
       builder: (context, cartController, child) {
@@ -201,6 +265,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                   );
                   break;
+                case 'sync_status':
+                  _showSyncDialog(context);
+                  break;
                 case 'order_history':
                   Navigator.push(
                     context,
@@ -247,6 +314,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     Icon(Icons.analytics, color: Colors.purple),
                     SizedBox(width: 8),
                     Text('Sales Reports'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'sync_status',
+                child: Row(
+                  children: [
+                    Icon(Icons.sync, color: Colors.teal),
+                    SizedBox(width: 8),
+                    Text('Sync Status'),
                   ],
                 ),
               ),
@@ -350,6 +427,46 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   );
                 },
                 tooltip: 'View Sales Reports',
+              ),
+
+              // Sync with badge
+              Consumer<SyncProvider>(
+                builder: (context, syncProvider, child) {
+                  return Stack(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.sync, color: Colors.white),
+                        onPressed: () => _showSyncDialog(context),
+                        tooltip: 'Sync Status',
+                      ),
+                      if (syncProvider.pendingOrdersCount > 0)
+                        Positioned(
+                          right: 4,
+                          top: 4,
+                          child: Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            constraints: BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              syncProvider.pendingOrdersCount.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

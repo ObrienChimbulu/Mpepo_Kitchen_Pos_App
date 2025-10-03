@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/colors.dart';
 import 'package:provider/provider.dart';
 import '../controllers/product_controller.dart';
 import '../models/product_model.dart';
@@ -75,7 +76,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Product updated successfully!'),
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.purple,
             ),
           );
         } else {
@@ -84,7 +85,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Product added successfully!'),
-              backgroundColor: Colors.green,
+              backgroundColor:TColors.primary
             ),
           );
         }
@@ -108,7 +109,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.product != null ? 'Edit Product' : 'Add New Product'),
-        backgroundColor: Colors.green[700],
+        backgroundColor:TColors.primary,
         actions: [
           if (_isLoading)
             Padding(
@@ -170,7 +171,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Icon(
-              Icons.fastfood,
+              Icons.restaurant_menu_rounded,
               size: 50,
               color: Colors.grey[400],
             );
@@ -178,7 +179,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         ),
       )
           : Icon(
-        Icons.fastfood,
+        Icons.restaurant_menu_rounded,
         size: 50,
         color: Colors.grey[400],
       ),
@@ -196,7 +197,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: 'Product Name *',
-                prefixIcon: Icon(Icons.fastfood),
+                prefixIcon: Icon(Icons.restaurant_menu_rounded),
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
@@ -212,7 +213,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 labelText: 'Price *',
-                prefixIcon: Icon(Icons.attach_money),
+                prefixIcon: Icon(Icons.price_check),
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
@@ -300,7 +301,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       child: ElevatedButton(
         onPressed: _isLoading ? null : _saveProduct,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green[700],
+          backgroundColor: TColors.primary,
           padding: EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -317,7 +318,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         )
             : Text(
           widget.product != null ? 'UPDATE PRODUCT' : 'ADD PRODUCT',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white),
         ),
       ),
     );

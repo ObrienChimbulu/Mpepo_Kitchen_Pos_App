@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/colors.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/currency.dart';
 import 'package:provider/provider.dart';
 import '../controllers/cart_controller.dart';
 import '../controllers/sync_provider.dart';
@@ -109,7 +111,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ),
           child: Icon(
             Icons.receipt,
-            color: Colors.green[700],
+            color: TColors.primary,
             size: 30,
           ),
         ),
@@ -122,16 +124,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
           children: [
             Text(_formatOrderDate(order.createdAt)),
             Text(
-              '${order.items.length} items • \$${order.total.toStringAsFixed(2)}',
+              '${order.items.length} items • ${TCurrency.ZambiaCurrency} ${order.total.toStringAsFixed(2)}',
               style: TextStyle(
-                color: Colors.green[700],
+                color:TColors.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
             if (order.taxAuthorityRef != null)
               Text(
                 'Tax Ref: ${order.taxAuthorityRef}',
-                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                style: TextStyle(fontSize: 12, color: TColors.primary),
               ),
           ],
         ),
@@ -294,7 +296,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Order History'),
-        backgroundColor: Colors.green[700],
+        backgroundColor: TColors.primary,
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
@@ -335,7 +337,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _refreshOrders,
         child: Icon(Icons.refresh),
-        backgroundColor: Colors.green[700],
+        backgroundColor:TColors.primary,
       ),
     );
   }
@@ -351,7 +353,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               });
             },
             style: TextButton.styleFrom(
-              foregroundColor: _selectedTab == tabIndex ? Colors.green[700] : Colors.grey[600],
+              foregroundColor: _selectedTab == tabIndex ? TColors.primary : Colors.grey[600],
               backgroundColor: _selectedTab == tabIndex ? Colors.green[50] : Colors.transparent,
               shape: RoundedRectangleBorder(),
             ),

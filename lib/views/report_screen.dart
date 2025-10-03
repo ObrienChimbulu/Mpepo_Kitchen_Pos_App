@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/colors.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/currency.dart';
 import '../services/api_service.dart';
 
 class ReportsScreen extends StatefulWidget {
@@ -47,7 +49,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sales Reports'),
-        backgroundColor: Colors.green[700],
+        backgroundColor: TColors.primary,
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
@@ -109,10 +111,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
             SizedBox(height: 16),
             if (dailyReport != null) ...[
               _buildReportRow('Date', dailyReport!['date']),
-              _buildReportRow('Total Sales', '\$${dailyReport!['total_sales'].toStringAsFixed(2)}'),
+              _buildReportRow('Total Sales', '${TCurrency.ZambiaCurrency} ${dailyReport!['total_sales'].toStringAsFixed(2)}'),
               _buildReportRow('Total Orders', dailyReport!['total_orders'].toString()),
-              _buildReportRow('Tax Collected', '\$${dailyReport!['total_tax'].toStringAsFixed(2)}'),
-              _buildReportRow('Average Order', '\$${dailyReport!['average_order_value'].toStringAsFixed(2)}'),
+              _buildReportRow('Tax Collected', '${TCurrency.ZambiaCurrency} ${dailyReport!['total_tax'].toStringAsFixed(2)}'),
+              _buildReportRow('Average Order', '${TCurrency.ZambiaCurrency} ${dailyReport!['average_order_value'].toStringAsFixed(2)}'),
             ],
           ],
         ),
@@ -129,15 +131,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '7-Day Sales Summary',
+              'Last 7 days Summary',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             if (salesSummary != null) ...[
               _buildReportRow('Period', salesSummary!['period']),
-              _buildReportRow('Total Sales', '\$${salesSummary!['total_sales'].toStringAsFixed(2)}'),
+              _buildReportRow('Total Sales', '${TCurrency.ZambiaCurrency} ${salesSummary!['total_sales'].toStringAsFixed(2)}'),
               _buildReportRow('Total Orders', salesSummary!['total_orders'].toString()),
-              _buildReportRow('Total Tax', '\$${salesSummary!['total_tax'].toStringAsFixed(2)}'),
+              _buildReportRow('Total Tax', '${TCurrency.ZambiaCurrency} ${salesSummary!['total_tax'].toStringAsFixed(2)}'),
               SizedBox(height: 16),
               Text('Daily Breakdown:', style: TextStyle(fontWeight: FontWeight.bold)),
               ..._buildDailyBreakdown(),
@@ -173,7 +175,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(day['date']),
-            Text('\$${day['total_sales'].toStringAsFixed(2)}'),
+            Text('${TCurrency.ZambiaCurrency} ${day['total_sales'].toStringAsFixed(2)}'),
           ],
         ),
       );

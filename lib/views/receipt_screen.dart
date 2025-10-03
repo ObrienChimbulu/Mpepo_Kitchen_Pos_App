@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/currency.dart';
 import '../models/receipt_model.dart';
+import '../utils/constants/colors.dart';
 
 class ReceiptScreen extends StatelessWidget {
   final Receipt receipt;
@@ -10,17 +12,17 @@ class ReceiptScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Receipt'),
-        backgroundColor: Colors.green[700],
+        title: Text('Order Receipt',style: TextStyle(color: Colors.white),),
+        backgroundColor: TColors.primary,
         actions: [
           IconButton(
-            icon: Icon(Icons.share),
+            icon: Icon(Icons.share,color: Colors.white,),
             onPressed: () {
               _shareReceipt(context);
             },
           ),
           IconButton(
-            icon: Icon(Icons.print),
+            icon: Icon(Icons.print,color: Colors.white,),
             onPressed: () {
               _printReceipt(context);
             },
@@ -56,7 +58,7 @@ class ReceiptScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.green[700],
+                color: TColors.primary,
               ),
             ),
             SizedBox(height: 8),
@@ -114,7 +116,7 @@ class ReceiptScreen extends StatelessWidget {
                 'Tax Reference: ${receipt.taxAuthorityRef}',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.green[700],
+                  color:TColors.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -155,7 +157,7 @@ class ReceiptScreen extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: Text(
-                      '\$${item.subtotal.toStringAsFixed(2)}',
+                      '${TCurrency.ZambiaCurrency} ${item.subtotal.toStringAsFixed(2)}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -179,7 +181,7 @@ class ReceiptScreen extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Text(
-                    '\$${receipt.order.subtotal.toStringAsFixed(2)}',
+                    '${TCurrency.ZambiaCurrency} ${receipt.order.subtotal.toStringAsFixed(2)}',
                     style: TextStyle(fontSize: 14),
                     textAlign: TextAlign.right,
                   ),
@@ -238,11 +240,11 @@ class ReceiptScreen extends StatelessWidget {
             ),
           ),
           Text(
-            '\$${amount.toStringAsFixed(2)}',
+            '${TCurrency.ZambiaCurrency} ${amount.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color: isTotal ? Colors.green[700] : Colors.black,
+              color: isTotal ? TColors.primary : Colors.black,
             ),
           ),
         ],
@@ -257,13 +259,13 @@ class ReceiptScreen extends StatelessWidget {
           width: double.infinity,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green[700],
+              backgroundColor: TColors.primary,
               padding: EdgeInsets.symmetric(vertical: 16),
             ),
             onPressed: () {
               _showReceiptText(context);
             },
-            child: Text('VIEW RECEIPT TEXT', style: TextStyle(fontSize: 16)),
+            child: Text('VIEW RECEIPT TEXT', style: TextStyle(fontSize: 16,color: Colors.white)),
           ),
         ),
         SizedBox(height: 12),
@@ -272,13 +274,13 @@ class ReceiptScreen extends StatelessWidget {
           child: OutlinedButton(
             style: OutlinedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 16),
-              side: BorderSide(color: Colors.green[700]!),
+              side: BorderSide(color: TColors.primary!),
             ),
             onPressed: () {
               Navigator.popUntil(context, (route) => route.isFirst);
             },
             child: Text('NEW ORDER',
-                style: TextStyle(fontSize: 16, color: Colors.green[700])),
+                style: TextStyle(fontSize: 16, color: TColors.primary)),
           ),
         ),
         SizedBox(height: 12),
@@ -300,7 +302,7 @@ class ReceiptScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Receipt Text'),
+        title: Text('Receipt'),
         content: SingleChildScrollView(
           child: SelectableText(
             receipt.generateReceiptText(),

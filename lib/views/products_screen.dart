@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/colors.dart';
 import 'package:provider/provider.dart';
 import '../controllers/cart_controller.dart';
 import '../controllers/product_controller.dart';
@@ -188,139 +189,17 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mpepo Kitchen POS'),
-        backgroundColor: Colors.green[700],
+        title: Text('Mpepo Kitchen POS',style: TextStyle(
+          color: Colors.white
+        ),),
         actions: [
-          // User info
-          if (authController.currentUser != null) ...[
-            Padding(
-              padding: EdgeInsets.only(right: 8),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.green[100],
-                    radius: 16,
-                    child: Text(
-                      authController.currentUser!.username[0].toUpperCase(),
-                      style: TextStyle(
-                        color: Colors.green[700],
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        authController.currentUser!.fullName,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        authController.currentUser!.role.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.green[100],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 16),
-                ],
-              ),
-            ),
-          ],
-
-          // Orders button
-          IconButton(
-            icon: Icon(Icons.history),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => OrdersScreen()),
-              );
-            },
-            tooltip: 'Order History',
-          ),
-
-          // Manage Products button
-          IconButton(
-            icon: Icon(Icons.inventory),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ManageProductsScreen()),
-              );
-            },
-            tooltip: 'Manage Products',
-          ),
-
-          // Reports button
-          IconButton(
-            icon: Icon(Icons.analytics),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ReportsScreen()),
-              );
-            },
-            tooltip: 'View Sales Reports',
-          ),
-
-          // Sync button with badge
-          Consumer<SyncProvider>(
-            builder: (context, syncProvider, child) {
-              return Stack(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.sync),
-                    onPressed: () {
-                      _showSyncDialog(context);
-                    },
-                    tooltip: 'Sync Status',
-                  ),
-                  if (syncProvider.pendingOrdersCount > 0)
-                    Positioned(
-                      right: 8,
-                      top: 8,
-                      child: Container(
-                        padding: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        constraints: BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
-                        ),
-                        child: Text(
-                          syncProvider.pendingOrdersCount.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-
-          // Cart icon with badge - FIXED VERSION
+          // Cart with badge
           Consumer<CartController>(
             builder: (context, cartController, child) {
               return Stack(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.shopping_cart),
+                    icon: Icon(Icons.shopping_cart, color: Colors.white),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -332,18 +211,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   ),
                   if (cartController.itemCount > 0)
                     Positioned(
-                      right: 8,
-                      top: 8,
+                      right: 4,
+                      top: 4,
                       child: Container(
                         padding: EdgeInsets.all(2),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        constraints: BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
-                        ),
+                        constraints: BoxConstraints(minWidth: 16, minHeight: 16),
                         child: Text(
                           cartController.itemCount.toString(),
                           style: TextStyle(
@@ -359,98 +235,52 @@ class _ProductsScreenState extends State<ProductsScreen> {
               );
             },
           ),
-
-          // Dropdown menu
           PopupMenuButton<String>(
-            icon: Icon(Icons.more_vert),
+            icon: Icon(Icons.more_vert, color: Colors.white),
             onSelected: (value) {
-              if (value == 'logout') {
-                _logout(context);
-              } else if (value == 'refresh') {
-                _refreshProducts();
-              } else if (value == 'reports') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ReportsScreen()),
-                );
-              } else if (value == 'manage_products') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ManageProductsScreen()),
-                );
-              } else if (value == 'sync_status') {
-                _showSyncDialog(context);
-              } else if (value == 'order_history') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OrdersScreen()),
-                );
+              switch (value) {
+                case 'logout':
+                  _logout(context);
+                  break;
+                case 'refresh':
+                  _refreshProducts();
+                  break;
+                case 'reports':
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ReportsScreen()),
+                  );
+                  break;
+                case 'manage_products':
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageProductsScreen()),
+                  );
+                  break;
+                case 'sync_status':
+                  _showSyncDialog(context);
+                  break;
+                case 'order_history':
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OrdersScreen()),
+                  );
+                  break;
               }
             },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
-                value: 'refresh',
-                child: Row(
-                  children: [
-                    Icon(Icons.refresh, color: Colors.green[700]),
-                    SizedBox(width: 8),
-                    Text('Refresh Products'),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'manage_products',
-                child: Row(
-                  children: [
-                    Icon(Icons.inventory, color: Colors.orange),
-                    SizedBox(width: 8),
-                    Text('Manage Products'),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'order_history',
-                child: Row(
-                  children: [
-                    Icon(Icons.history, color: Colors.blue),
-                    SizedBox(width: 8),
-                    Text('Order History'),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'reports',
-                child: Row(
-                  children: [
-                    Icon(Icons.analytics, color: Colors.purple),
-                    SizedBox(width: 8),
-                    Text('Sales Reports'),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'sync_status',
-                child: Row(
-                  children: [
-                    Icon(Icons.sync, color: Colors.teal),
-                    SizedBox(width: 8),
-                    Text('Sync Status'),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'logout',
-                child: Row(
-                  children: [
-                    Icon(Icons.logout, color: Colors.red),
-                    SizedBox(width: 8),
-                    Text('Logout'),
-                  ],
-                ),
-              ),
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'refresh', child: Row(children: [Icon(Icons.refresh, color: TColors.primary), SizedBox(width: 8), Text('Refresh Products')])),
+              PopupMenuItem(value: 'manage_products', child: Row(children: [Icon(Icons.inventory, color: Colors.orange), SizedBox(width: 8), Text('Manage Products')])),
+              PopupMenuItem(value: 'order_history', child: Row(children: [Icon(Icons.history, color: Colors.blue), SizedBox(width: 8), Text('Order History')])),
+              PopupMenuItem(value: 'reports', child: Row(children: [Icon(Icons.analytics, color: Colors.purple), SizedBox(width: 8), Text('Sales Reports')])),
+              PopupMenuItem(value: 'sync_status', child: Row(children: [Icon(Icons.sync, color: Colors.teal), SizedBox(width: 8), Text('Sync Status')])),
+              PopupMenuItem(value: 'logout', child: Row(children: [Icon(Icons.logout, color: Colors.red), SizedBox(width: 8), Text('Logout')])),
             ],
           ),
+
         ],
+        backgroundColor: TColors.primary,
+        shadowColor: Colors.lightBlue,
       ),
       body: Column(
         children: [
@@ -493,10 +323,97 @@ class _ProductsScreenState extends State<ProductsScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomAppBar(
+        color: TColors.primary,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Orders
+              IconButton(
+                icon: Icon(Icons.history, color: Colors.white),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OrdersScreen()),
+                  );
+                },
+                tooltip: 'Order History',
+              ),
+
+              // Manage Products
+              IconButton(
+                icon: Icon(Icons.inventory, color: Colors.white),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageProductsScreen()),
+                  );
+                },
+                tooltip: 'Manage Products',
+              ),
+
+              // Reports
+              IconButton(
+                icon: Icon(Icons.analytics, color: Colors.white),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ReportsScreen()),
+                  );
+                },
+                tooltip: 'View Sales Reports',
+              ),
+
+              // Sync with badge
+              Consumer<SyncProvider>(
+                builder: (context, syncProvider, child) {
+                  return Stack(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.sync, color: Colors.white),
+                        onPressed: () => _showSyncDialog(context),
+                        tooltip: 'Sync Status',
+                      ),
+                      if (syncProvider.pendingOrdersCount > 0)
+                        Positioned(
+                          right: 4,
+                          top: 4,
+                          child: Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            constraints: BoxConstraints(minWidth: 16, minHeight: 16),
+                            child: Text(
+                              syncProvider.pendingOrdersCount.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+
+
+
+            ],
+          ),
+
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _refreshProducts,
         child: Icon(Icons.refresh),
-        backgroundColor: Colors.green[700],
+        backgroundColor: TColors.primary,
       ),
     );
   }

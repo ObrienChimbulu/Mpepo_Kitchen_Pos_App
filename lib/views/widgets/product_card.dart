@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/colors.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/currency.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/cart_controller.dart';
 import '../../models/product_model.dart';
@@ -37,7 +39,17 @@ class ProductCard extends StatelessWidget {
               flex: 3,
               child: Container(
                 color: Colors.grey[200],
-                child: Icon(Icons.fastfood, size: 50, color: Colors.grey[600]),
+                child: Image.network(
+                  product.imageUrl!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.fastfood,
+                      color: TColors.primary,
+                      size: 30,
+                    );
+                  },
+                ),
               ),
             ),
             Expanded(
@@ -60,10 +72,10 @@ class ProductCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      '\$${product.price.toStringAsFixed(2)}',
+                      '${TCurrency.ZambiaCurrency} ${product.price.toStringAsFixed(2)}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.green[700],
+                        color: TColors.primary,
                         fontSize: 16,
                       ),
                     ),

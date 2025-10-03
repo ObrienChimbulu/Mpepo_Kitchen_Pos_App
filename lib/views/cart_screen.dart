@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/colors.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/currency.dart';
 import '../controllers/cart_controller.dart';
 import '../models/order_model.dart';
 import '../models/receipt_model.dart';
@@ -43,7 +45,7 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Shopping Cart'),
-        backgroundColor: Colors.green[700],
+        backgroundColor: TColors.primary,
       ),
       body: Column(
         children: [
@@ -90,7 +92,7 @@ class _CartScreenState extends State<CartScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Subtotal:', style: TextStyle(fontSize: 16)),
-              Text('\$${widget.cartController.subtotal.toStringAsFixed(2)}',
+              Text('${TCurrency.ZambiaCurrency} ${widget.cartController.subtotal.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 16)),
             ],
           ),
@@ -99,7 +101,7 @@ class _CartScreenState extends State<CartScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Tax (16%):', style: TextStyle(fontSize: 16)),
-              Text('\$${widget.cartController.taxAmount.toStringAsFixed(2)}',
+              Text('${TCurrency.ZambiaCurrency} ${widget.cartController.taxAmount.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 16)),
             ],
           ),
@@ -110,8 +112,8 @@ class _CartScreenState extends State<CartScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('TOTAL:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text('\$${widget.cartController.total.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green[700])),
+              Text('${TCurrency.ZambiaCurrency} ${widget.cartController.total.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: TColors.primary)),
             ],
           ),
           SizedBox(height: 16),
@@ -119,7 +121,7 @@ class _CartScreenState extends State<CartScreen> {
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green[700],
+                backgroundColor: TColors.primary,
                 padding: EdgeInsets.symmetric(vertical: 16),
               ),
               onPressed: _isLoading ? null : () => _completeOrder(context),
@@ -129,10 +131,10 @@ class _CartScreenState extends State<CartScreen> {
                 width: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
                 ),
               )
-                  : Text('COMPLETE ORDER', style: TextStyle(fontSize: 16)),
+                  : Text('COMPLETE ORDER', style: TextStyle(fontSize: 16,color: Colors.white)),
             ),
           ),
         ],

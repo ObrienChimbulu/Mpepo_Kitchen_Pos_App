@@ -44,7 +44,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shopping Cart'),
+        title: Text('Shopping Cart', style: TextStyle(color: TColors.white)),
         backgroundColor: TColors.primary,
       ),
       body: Column(
@@ -52,25 +52,35 @@ class _CartScreenState extends State<CartScreen> {
           Expanded(
             child: widget.cartController.cart.items.isEmpty
                 ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.shopping_cart_outlined, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('Your cart is empty', style: TextStyle(fontSize: 18)),
-                ],
-              ),
-            )
-                : ListView.builder(
-              itemCount: widget.cartController.cart.items.length,
-              itemBuilder: (context, index) {
-                final item = widget.cartController.cart.items[index];
-                return CartItemCard(
-                  item: item,
-                  cartController: widget.cartController,
-                );
-              },
-            ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 64,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Your cart is empty',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: ListView.builder(
+                      itemCount: widget.cartController.cart.items.length,
+                      itemBuilder: (context, index) {
+                        final item = widget.cartController.cart.items[index];
+                        return CartItemCard(
+                          item: item,
+                          cartController: widget.cartController,
+                        );
+                      },
+                    ),
+                  ),
           ),
           if (widget.cartController.cart.items.isNotEmpty)
             _buildTotalSection(context),
@@ -92,8 +102,10 @@ class _CartScreenState extends State<CartScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Subtotal:', style: TextStyle(fontSize: 16)),
-              Text('${TCurrency.ZambiaCurrency} ${widget.cartController.subtotal.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 16)),
+              Text(
+                '${TCurrency.ZambiaCurrency} ${widget.cartController.subtotal.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 16),
+              ),
             ],
           ),
           SizedBox(height: 8),
@@ -101,8 +113,10 @@ class _CartScreenState extends State<CartScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Tax (16%):', style: TextStyle(fontSize: 16)),
-              Text('${TCurrency.ZambiaCurrency} ${widget.cartController.taxAmount.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 16)),
+              Text(
+                '${TCurrency.ZambiaCurrency} ${widget.cartController.taxAmount.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 16),
+              ),
             ],
           ),
           SizedBox(height: 8),
@@ -111,9 +125,18 @@ class _CartScreenState extends State<CartScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('TOTAL:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text('${TCurrency.ZambiaCurrency} ${widget.cartController.total.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: TColors.primary)),
+              Text(
+                'TOTAL:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '${TCurrency.ZambiaCurrency} ${widget.cartController.total.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: TColors.primary,
+                ),
+              ),
             ],
           ),
           SizedBox(height: 16),
@@ -127,14 +150,19 @@ class _CartScreenState extends State<CartScreen> {
               onPressed: _isLoading ? null : () => _completeOrder(context),
               child: _isLoading
                   ? SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
-                ),
-              )
-                  : Text('COMPLETE ORDER', style: TextStyle(fontSize: 16,color: Colors.white)),
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.purple,
+                        ),
+                      ),
+                    )
+                  : Text(
+                      'COMPLETE ORDER',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
             ),
           ),
         ],
@@ -169,7 +197,6 @@ class _CartScreenState extends State<CartScreen> {
           ),
         );
       }
-
     } catch (e) {
       // Show error message
       if (mounted) {

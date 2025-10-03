@@ -37,7 +37,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
     // Initialize cart controller and sync
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final cartController = Provider.of<CartController>(context, listen: false);
+      final cartController = Provider.of<CartController>(
+        context,
+        listen: false,
+      );
       final syncProvider = Provider.of<SyncProvider>(context, listen: false);
 
       cartController.initialize();
@@ -110,14 +113,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   Icon(
                     cartController.isOnline ? Icons.wifi : Icons.wifi_off,
                     size: 40,
-                    color: cartController.isOnline ? Colors.green : Colors.orange,
+                    color: cartController.isOnline
+                        ? Colors.green
+                        : Colors.orange,
                   ),
                   SizedBox(height: 16),
                   Text(
                     cartController.isOnline ? 'Online' : 'Offline',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: cartController.isOnline ? Colors.green : Colors.orange,
+                      color: cartController.isOnline
+                          ? Colors.green
+                          : Colors.orange,
                     ),
                   ),
                   SizedBox(height: 8),
@@ -169,10 +176,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 if (cartController.pendingOrdersCount > 0)
                   Text(
                     '(${cartController.pendingOrdersCount} pending)',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
               ],
             ),
@@ -189,9 +193,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mpepo Kitchen POS',style: TextStyle(
-          color: Colors.white
-        ),),
+        title: Text('Mpepo Kitchen POS', style: TextStyle(color: Colors.white)),
         actions: [
           // Cart with badge
           Consumer<CartController>(
@@ -204,7 +206,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CartScreen(cartController: _cartController),
+                          builder: (context) =>
+                              CartScreen(cartController: _cartController),
                         ),
                       );
                     },
@@ -219,7 +222,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        constraints: BoxConstraints(minWidth: 16, minHeight: 16),
+                        constraints: BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
                         child: Text(
                           cartController.itemCount.toString(),
                           style: TextStyle(
@@ -254,7 +260,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 case 'manage_products':
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ManageProductsScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => ManageProductsScreen(),
+                    ),
                   );
                   break;
                 case 'sync_status':
@@ -269,15 +277,68 @@ class _ProductsScreenState extends State<ProductsScreen> {
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem(value: 'refresh', child: Row(children: [Icon(Icons.refresh, color: TColors.primary), SizedBox(width: 8), Text('Refresh Products')])),
-              PopupMenuItem(value: 'manage_products', child: Row(children: [Icon(Icons.inventory, color: Colors.orange), SizedBox(width: 8), Text('Manage Products')])),
-              PopupMenuItem(value: 'order_history', child: Row(children: [Icon(Icons.history, color: Colors.blue), SizedBox(width: 8), Text('Order History')])),
-              PopupMenuItem(value: 'reports', child: Row(children: [Icon(Icons.analytics, color: Colors.purple), SizedBox(width: 8), Text('Sales Reports')])),
-              PopupMenuItem(value: 'sync_status', child: Row(children: [Icon(Icons.sync, color: Colors.teal), SizedBox(width: 8), Text('Sync Status')])),
-              PopupMenuItem(value: 'logout', child: Row(children: [Icon(Icons.logout, color: Colors.red), SizedBox(width: 8), Text('Logout')])),
+              PopupMenuItem(
+                value: 'refresh',
+                child: Row(
+                  children: [
+                    Icon(Icons.refresh, color: TColors.primary),
+                    SizedBox(width: 8),
+                    Text('Refresh Products'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'manage_products',
+                child: Row(
+                  children: [
+                    Icon(Icons.inventory, color: Colors.orange),
+                    SizedBox(width: 8),
+                    Text('Manage Products'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'order_history',
+                child: Row(
+                  children: [
+                    Icon(Icons.history, color: Colors.blue),
+                    SizedBox(width: 8),
+                    Text('Order History'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'reports',
+                child: Row(
+                  children: [
+                    Icon(Icons.analytics, color: Colors.purple),
+                    SizedBox(width: 8),
+                    Text('Sales Reports'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'sync_status',
+                child: Row(
+                  children: [
+                    Icon(Icons.sync, color: Colors.teal),
+                    SizedBox(width: 8),
+                    Text('Sync Status'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'logout',
+                child: Row(
+                  children: [
+                    Icon(Icons.logout, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Logout'),
+                  ],
+                ),
+              ),
             ],
           ),
-
         ],
         backgroundColor: TColors.primary,
         shadowColor: Colors.lightBlue,
@@ -290,36 +351,36 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 ? Center(child: CircularProgressIndicator())
                 : _error != null
                 ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error, size: 64, color: Colors.red),
-                  SizedBox(height: 16),
-                  Text('Error: $_error'),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _refreshProducts,
-                    child: Text('Retry'),
-                  ),
-                ],
-              ),
-            )
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error, size: 64, color: Colors.red),
+                        SizedBox(height: 16),
+                        Text('Error: $_error'),
+                        SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _refreshProducts,
+                          child: Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  )
                 : GridView.builder(
-              padding: EdgeInsets.all(8),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                childAspectRatio: 0.8,
-              ),
-              itemCount: _products.length,
-              itemBuilder: (context, index) {
-                return ProductCard(
-                  product: _products[index],
-                  cartController: _cartController,
-                );
-              },
-            ),
+                    padding: EdgeInsets.all(8),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 0.8,
+                    ),
+                    itemCount: _products.length,
+                    itemBuilder: (context, index) {
+                      return ProductCard(
+                        product: _products[index],
+                        cartController: _cartController,
+                      );
+                    },
+                  ),
           ),
         ],
       ),
@@ -348,7 +409,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ManageProductsScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => ManageProductsScreen(),
+                    ),
                   );
                 },
                 tooltip: 'Manage Products',
@@ -386,7 +449,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               color: Colors.orange,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            constraints: BoxConstraints(minWidth: 16, minHeight: 16),
+                            constraints: BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
                             child: Text(
                               syncProvider.pendingOrdersCount.toString(),
                               style: TextStyle(
@@ -402,12 +468,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   );
                 },
               ),
-
-
-
             ],
           ),
-
         ),
       ),
       floatingActionButton: FloatingActionButton(

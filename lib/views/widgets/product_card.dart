@@ -9,16 +9,14 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final CartController? cartController;
 
-  const ProductCard({
-    Key? key,
-    required this.product,
-    this.cartController,
-  }) : super(key: key);
+  const ProductCard({Key? key, required this.product, this.cartController})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // If cartController is not provided, get it from Provider
-    final cartCtrl = cartController ?? Provider.of<CartController>(context, listen: false);
+    final cartCtrl =
+        cartController ?? Provider.of<CartController>(context, listen: false);
 
     return Card(
       elevation: 2,
@@ -40,13 +38,13 @@ class ProductCard extends StatelessWidget {
               child: Container(
                 color: Colors.grey[200],
                 child: Image.network(
-                  product.imageUrl!,
+                  product.imageUrl ?? "",
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Icon(
-                      Icons.fastfood,
+                      Icons.restaurant_menu_rounded,
                       color: TColors.primary,
-                      size: 30,
+                      size: 42,
                     );
                   },
                 ),

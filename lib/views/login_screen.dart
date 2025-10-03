@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
           child: Icon(
-            Icons.restaurant,
+            Icons.restaurant_menu_rounded,
             size: 60,
             color: Colors.white,
           ),
@@ -105,9 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Card(
         elevation: 8,
         shadowColor: TColors.primary.withOpacity(0.2),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: EdgeInsets.all(32),
           child: Form(
@@ -115,10 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (_error != null) ...[
-                  _buildError(),
-                  SizedBox(height: 24),
-                ],
+                if (_error != null) ...[_buildError(), SizedBox(height: 24)],
                 _buildUsernameField(),
                 SizedBox(height: 20),
                 _buildPasswordField(),
@@ -270,12 +265,12 @@ class _LoginScreenState extends State<LoginScreen> {
         boxShadow: _isLoading
             ? []
             : [
-          BoxShadow(
-            color: TColors.primary.withOpacity(0.4),
-            blurRadius: 12,
-            offset: Offset(0, 6),
-          ),
-        ],
+                BoxShadow(
+                  color: TColors.primary.withOpacity(0.4),
+                  blurRadius: 12,
+                  offset: Offset(0, 6),
+                ),
+              ],
       ),
       child: ElevatedButton(
         onPressed: _isLoading ? null : _login,
@@ -288,22 +283,22 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         child: _isLoading
             ? SizedBox(
-          height: 24,
-          width: 24,
-          child: CircularProgressIndicator(
-            strokeWidth: 2.5,
-            valueColor: AlwaysStoppedAnimation(Colors.white),
-          ),
-        )
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                ),
+              )
             : Text(
-          'SIGN IN',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            letterSpacing: 1.2,
-          ),
-        ),
+                'SIGN IN',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                ),
+              ),
       ),
     );
   }
@@ -314,10 +309,7 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Text(
           "Don't have an account? ",
-          style: TextStyle(
-            fontSize: 15,
-            color: Colors.grey[700],
-          ),
+          style: TextStyle(fontSize: 15, color: Colors.grey[700]),
         ),
         TextButton(
           onPressed: () {
@@ -351,7 +343,10 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        final authController = Provider.of<AuthController>(context, listen: false);
+        final authController = Provider.of<AuthController>(
+          context,
+          listen: false,
+        );
         await authController.login(
           _usernameController.text.trim(),
           _passwordController.text,

@@ -62,7 +62,9 @@ class AuthService {
         return authResponse;
       } else {
         final error = json.decode(response.body);
-        throw Exception(error['detail'] ?? 'Login failed: ${response.statusCode}');
+        throw Exception(
+          error['detail'] ?? 'Login failed: ${response.statusCode}',
+        );
       }
     } catch (e) {
       throw Exception('Login error: $e');
@@ -84,7 +86,7 @@ class AuthService {
       );
 
       final response = await client.post(
-        Uri.parse('$baseUrl/register'),
+        Uri.parse('$baseUrl/api/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(registerRequest.toJson()),
       );
@@ -93,7 +95,9 @@ class AuthService {
         return User.fromJson(json.decode(response.body));
       } else {
         final error = json.decode(response.body);
-        throw Exception(error['detail'] ?? 'Registration failed: ${response.statusCode}');
+        throw Exception(
+          error['detail'] ?? 'Registration failed: ${response.statusCode}',
+        );
       }
     } catch (e) {
       throw Exception('Registration error: $e');

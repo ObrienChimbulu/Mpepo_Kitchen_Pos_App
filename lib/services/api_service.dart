@@ -6,7 +6,7 @@ import '../models/order_model.dart';
 import 'auth_service.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://10.0.2.2:8000';
+  static const String baseUrl = 'http://10.0.2.2:8000/api';
   static const int timeoutSeconds = 30;
 
   static final ApiService _instance = ApiService._internal();

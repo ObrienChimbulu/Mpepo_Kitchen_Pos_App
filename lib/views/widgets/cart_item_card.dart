@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mpepo_kitchen_pos_app/utils/constants/currency.dart';
 import '../../controllers/cart_controller.dart';
 import '../../models/cart_model.dart';
 
@@ -22,7 +23,7 @@ class CartItemCard extends StatelessWidget {
           child: Text(item.product.name[0]),
         ),
         title: Text(item.product.name),
-        subtitle: Text('\$${item.product.price.toStringAsFixed(2)} each'),
+        subtitle: Text('${TCurrency.ZambiaCurrency} ${item.product.price.toStringAsFixed(2)} each'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

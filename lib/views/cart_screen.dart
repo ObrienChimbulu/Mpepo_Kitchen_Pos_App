@@ -112,7 +112,7 @@ class _CartScreenState extends State<CartScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Tax (16%):', style: TextStyle(fontSize: 16)),
+              Text('Tax (12%):', style: TextStyle(fontSize: 16)),
               Text(
                 '${TCurrency.ZambiaCurrency} ${widget.cartController.taxAmount.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 16),

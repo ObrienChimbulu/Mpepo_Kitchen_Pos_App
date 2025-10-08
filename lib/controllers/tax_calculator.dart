@@ -1,5 +1,5 @@
 class TaxCalculator {
-  static const double taxRate = 0.16; // 16% VAT
+  static const double taxRate = 0.12; // 12% VAT
 
   /// Applies discount and returns the discounted amount
   double applyDiscount(double amount, double discountPercentage) {
@@ -20,7 +20,10 @@ class TaxCalculator {
   }
 
   /// Returns a breakdown of subtotal, discount, tax, and total
-  Map<String, double> calculateBreakdown(double subtotal, {double discountPercentage = 0}) {
+  Map<String, double> calculateBreakdown(
+    double subtotal, {
+    double discountPercentage = 0,
+  }) {
     final discountedAmount = applyDiscount(subtotal, discountPercentage);
     final taxAmount = calculateTax(discountedAmount);
     final totalAmount = discountedAmount + taxAmount;

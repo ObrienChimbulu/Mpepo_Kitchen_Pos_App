@@ -39,7 +39,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
       _onlineOrders = await _apiService.fetchOrders();
 
       // Load pending offline orders
-      final cartController = Provider.of<CartController>(context, listen: false);
+      final cartController = Provider.of<CartController>(
+        context,
+        listen: false,
+      );
       _pendingOrders = cartController.pendingOrders;
 
       setState(() {
@@ -69,9 +72,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => ReceiptScreen(receipt: receipt),
-      ),
+      MaterialPageRoute(builder: (context) => ReceiptScreen(receipt: receipt)),
     );
   }
 
@@ -88,9 +89,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => ReceiptScreen(receipt: receipt),
-      ),
+      MaterialPageRoute(builder: (context) => ReceiptScreen(receipt: receipt)),
     );
   }
 
@@ -100,45 +99,108 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Widget _buildOrderItem(Order order) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: ListTile(
-        leading: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.green[100],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            Icons.receipt,
-            color: TColors.primary,
-            size: 30,
-          ),
-        ),
-        title: Text(
-          'Order #${order.id.substring(0, 8)}...',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(_formatOrderDate(order.createdAt)),
-            Text(
-              '${order.items.length} items • ${TCurrency.ZambiaCurrency} ${order.total.toStringAsFixed(2)}',
-              style: TextStyle(
-                color:TColors.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            if (order.taxAuthorityRef != null)
-              Text(
-                'Tax Ref: ${order.taxAuthorityRef}',
-                style: TextStyle(fontSize: 12, color: TColors.primary),
-              ),
-          ],
-        ),
-        trailing: Icon(Icons.chevron_right),
+      elevation: 2,
+      margin: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: () => _viewOrderDetails(order),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: [
+              // Order Icon
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: TColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.receipt, color: TColors.primary, size: 24),
+              ),
+              SizedBox(width: 12),
+
+              // Order Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Order #${order.id.substring(0, 8)}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      _formatOrderDate(order.createdAt),
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Text(
+                          '${order.items.length} items',
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Container(
+                          width: 4,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          '${TCurrency.ZambiaCurrency} ${order.total.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            color: TColors.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (order.taxAuthorityRef != null) ...[
+                      SizedBox(height: 4),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: Colors.green.shade100),
+                        ),
+                        child: Text(
+                          'Tax Ref: ${order.taxAuthorityRef}',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.green.shade700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+
+              // Chevron
+              Icon(Icons.chevron_right, color: Colors.grey.shade400),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -157,11 +219,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             color: Colors.orange[100],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            Icons.wifi_off,
-            color: Colors.orange[700],
-            size: 30,
-          ),
+          child: Icon(Icons.wifi_off, color: Colors.orange[700], size: 30),
         ),
         title: Text(
           'Pending Order',
@@ -210,10 +268,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             SizedBox(height: 16),
             Text('Error: $_error'),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _refreshOrders,
-              child: Text('Retry'),
-            ),
+            ElevatedButton(onPressed: _refreshOrders, child: Text('Retry')),
           ],
         ),
       );
@@ -290,7 +345,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cartController = Provider.of<CartController>(context);
     final syncProvider = Provider.of<SyncProvider>(context);
 
     return Scaffold(
@@ -298,10 +352,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         title: Text('Order History'),
         backgroundColor: TColors.primary,
         actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: _refreshOrders,
-          ),
+          IconButton(icon: Icon(Icons.refresh), onPressed: _refreshOrders),
           if (syncProvider.pendingOrdersCount > 0)
             IconButton(
               icon: Icon(Icons.sync),
@@ -320,24 +371,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
               color: Colors.grey[100],
               border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
             ),
-            child: Row(
-              children: [
-                _buildTabButton('All', 0),
-                _buildTabButton('Online', 1),
-                _buildTabButton('Offline', 2, badgeCount: syncProvider.pendingOrdersCount),
-              ],
-            ),
+            child: Row(children: [_buildTabButton('All Orders', 0)]),
           ),
           // Orders List
-          Expanded(
-            child: _buildTabContent(),
-          ),
+          Expanded(child: _buildTabContent()),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _refreshOrders,
         child: Icon(Icons.refresh),
-        backgroundColor:TColors.primary,
+        backgroundColor: TColors.primary,
       ),
     );
   }
@@ -353,14 +396,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
               });
             },
             style: TextButton.styleFrom(
-              foregroundColor: _selectedTab == tabIndex ? TColors.primary : Colors.grey[600],
-              backgroundColor: _selectedTab == tabIndex ? Colors.green[50] : Colors.transparent,
+              foregroundColor: _selectedTab == tabIndex
+                  ? TColors.primary
+                  : Colors.grey[600],
+              backgroundColor: _selectedTab == tabIndex
+                  ? Colors.green[50]
+                  : Colors.transparent,
               shape: RoundedRectangleBorder(),
             ),
             child: Text(
               label,
               style: TextStyle(
-                fontWeight: _selectedTab == tabIndex ? FontWeight.bold : FontWeight.normal,
+                fontWeight: _selectedTab == tabIndex
+                    ? FontWeight.bold
+                    : FontWeight.normal,
               ),
             ),
           ),
@@ -374,10 +423,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   color: Colors.orange,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                constraints: BoxConstraints(
-                  minWidth: 16,
-                  minHeight: 16,
-                ),
+                constraints: BoxConstraints(minWidth: 16, minHeight: 16),
                 child: Text(
                   badgeCount.toString(),
                   style: TextStyle(

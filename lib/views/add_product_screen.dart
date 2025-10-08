@@ -55,7 +55,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
       });
 
       try {
-        final productController = Provider.of<ProductController>(context, listen: false);
+        final productController = Provider.of<ProductController>(
+          context,
+          listen: false,
+        );
 
         final product = Product(
           id: widget.product?.id ?? '', // Keep existing ID if editing
@@ -85,13 +88,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Product added successfully!'),
-              backgroundColor:TColors.primary
+              backgroundColor: TColors.primary,
             ),
           );
         }
 
         Navigator.pop(context, true); // Return success
-
       } catch (e) {
         setState(() {
           _error = e.toString().replaceAll('Exception: ', '');
@@ -108,8 +110,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.product != null ? 'Edit Product' : 'Add New Product'),
-        backgroundColor:TColors.primary,
+        title: Text(
+          widget.product != null ? 'Edit Product' : 'Add New Product',
+        ),
+        backgroundColor: TColors.primary,
         actions: [
           if (_isLoading)
             Padding(
@@ -156,119 +160,141 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   Widget _buildImagePreview() {
     return Container(
-      width: 150,
-      height: 150,
+      width: 100,
+      height: 100,
       decoration: BoxDecoration(
         color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(80),
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: _imageUrlController.text.isNotEmpty
           ? ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.network(
-          _imageUrlController.text,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Icon(
+              borderRadius: BorderRadius.circular(80),
+              child: Image.network(
+                _imageUrlController.text,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(
+                    Icons.restaurant_menu_rounded,
+                    size: 50,
+                    color: Colors.grey[400],
+                  );
+                },
+              ),
+            )
+          : Icon(
               Icons.restaurant_menu_rounded,
               size: 50,
               color: Colors.grey[400],
-            );
-          },
-        ),
-      )
-          : Icon(
-        Icons.restaurant_menu_rounded,
-        size: 50,
-        color: Colors.grey[400],
-      ),
+            ),
     );
   }
 
   Widget _buildProductForm() {
     return Card(
-      elevation: 4,
-      child: Padding(
-        padding: EdgeInsets.all(16),
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.white, Colors.grey.shade50],
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Column(
           children: [
-            TextFormField(
+            Row(
+              children: [
+                Icon(Icons.add_circle_outline, color: Colors.blue.shade600),
+                SizedBox(width: 8),
+                Text(
+                  'Product Information',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.blue.shade800,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            _buildFloatingTextField(
               controller: _nameController,
-              decoration: InputDecoration(
-                labelText: 'Product Name *',
-                prefixIcon: Icon(Icons.restaurant_menu_rounded),
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter product name';
-                }
-                return null;
-              },
+              label: 'Product Name',
+              icon: Icons.restaurant_menu_rounded,
+              isRequired: true,
             ),
             SizedBox(height: 16),
-            TextFormField(
+            _buildFloatingTextField(
               controller: _priceController,
+              label: 'Price',
+              icon: Icons.attach_money,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                labelText: 'Price *',
-                prefixIcon: Icon(Icons.price_check),
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter price';
-                }
-                if (double.tryParse(value) == null) {
-                  return 'Please enter a valid price';
-                }
-                if (double.parse(value) <= 0) {
-                  return 'Price must be greater than 0';
-                }
-                return null;
-              },
+              isRequired: true,
             ),
             SizedBox(height: 16),
-            TextFormField(
+            _buildFloatingTextField(
               controller: _categoryController,
-              decoration: InputDecoration(
-                labelText: 'Category *',
-                prefixIcon: Icon(Icons.category),
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter category';
-                }
-                return null;
-              },
+              label: 'Category',
+              icon: Icons.category,
+              isRequired: true,
             ),
             SizedBox(height: 16),
-            TextFormField(
+            _buildFloatingTextField(
               controller: _descriptionController,
+              label: 'Description',
               maxLines: 3,
-              decoration: InputDecoration(
-                labelText: 'Description',
-                alignLabelWithHint: true,
-                border: OutlineInputBorder(),
-              ),
             ),
             SizedBox(height: 16),
-            TextFormField(
+            _buildFloatingTextField(
               controller: _imageUrlController,
-              decoration: InputDecoration(
-                labelText: 'Image URL',
-                prefixIcon: Icon(Icons.image),
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                setState(() {}); // Refresh image preview
-              },
+              label: 'Image URL',
+              icon: Icons.link,
+              onChanged: (value) => setState(() {}),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildFloatingTextField({
+    required TextEditingController controller,
+    required String label,
+    IconData? icon,
+    TextInputType? keyboardType,
+    int maxLines = 1,
+    bool isRequired = false,
+    void Function(String)? onChanged,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: '$label${isRequired ? ' *' : ''}',
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        prefixIcon: icon != null
+            ? Icon(icon, color: Colors.blue.shade600)
+            : null,
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade400),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade400),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
+        ),
+        labelStyle: TextStyle(
+          color: Colors.grey.shade600,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      onChanged: onChanged,
     );
   }
 
@@ -285,10 +311,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           Icon(Icons.error, color: Colors.red),
           SizedBox(width: 8),
           Expanded(
-            child: Text(
-              _error!,
-              style: TextStyle(color: Colors.red),
-            ),
+            child: Text(_error!, style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -303,23 +326,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: TColors.primary,
           padding: EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: _isLoading
             ? SizedBox(
-          height: 20,
-          width: 20,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation(Colors.white),
-          ),
-        )
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                ),
+              )
             : Text(
-          widget.product != null ? 'UPDATE PRODUCT' : 'ADD PRODUCT',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white),
-        ),
+                widget.product != null ? 'UPDATE PRODUCT' : 'ADD PRODUCT',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
       ),
     );
   }

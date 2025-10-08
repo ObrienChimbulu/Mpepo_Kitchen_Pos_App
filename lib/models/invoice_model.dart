@@ -38,12 +38,12 @@ class TaxInvoice {
       'seller_info': {
         'name': sellerName,
         'tin': sellerTin,
-        'address': 'Mpepo Kitchen, Nairobi, Kenya'
+        'address': 'Mpepo Kitchen, Nairobi, Kenya',
       },
       'buyer_info': {
         'name': buyerName,
         'tin': buyerTin,
-        'address': 'Retail Customer'
+        'address': 'Retail Customer',
       },
       'items': items.map((item) => item.toJson()).toList(),
       'summary': {
@@ -52,17 +52,18 @@ class TaxInvoice {
         'total': total,
         'currency': currency,
       },
-      'tax_breakdown': {
-        'vat_rate': 0.16,
-        'vat_amount': taxAmount,
-      },
+      'tax_breakdown': {'vat_rate': 0.16, 'vat_amount': taxAmount},
       'qr_code': qrCodeData,
       'timestamp': DateTime.now().toIso8601String(),
     };
   }
 
   // Create from Order
-  factory TaxInvoice.fromOrder(Order order, {String buyerName = 'Retail Customer', String buyerTin = '000000000'}) {
+  factory TaxInvoice.fromOrder(
+    Order order, {
+    String buyerName = 'Retail Customer',
+    String buyerTin = '000000000',
+  }) {
     return TaxInvoice(
       invoiceNumber: 'INV-${order.id}',
       issueDate: order.createdAt,
@@ -112,7 +113,7 @@ class InvoiceItem {
       quantity: cartItem.quantity,
       unitPrice: cartItem.product.price,
       total: cartItem.subtotal,
-      taxAmount: cartItem.subtotal * 0.16, // 16% VAT
+      taxAmount: cartItem.subtotal * 0.12, // 12% VAT
     );
   }
 }
@@ -138,7 +139,9 @@ class TaxSubmissionResult {
       invoiceNumber: json['invoice_number'],
       authorityReference: json['authority_reference'],
       errorMessage: json['error_message'],
-      timestamp: DateTime.parse(json['timestamp'] ?? DateTime.now().toIso8601String()),
+      timestamp: DateTime.parse(
+        json['timestamp'] ?? DateTime.now().toIso8601String(),
+      ),
     );
   }
 }

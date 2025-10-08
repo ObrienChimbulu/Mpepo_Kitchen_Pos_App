@@ -12,17 +12,17 @@ class ReceiptScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Receipt',style: TextStyle(color: Colors.white),),
+        title: Text('Order Receipt', style: TextStyle(color: Colors.white)),
         backgroundColor: TColors.primary,
         actions: [
           IconButton(
-            icon: Icon(Icons.share,color: Colors.white,),
+            icon: Icon(Icons.share, color: Colors.white),
             onPressed: () {
               _shareReceipt(context);
             },
           ),
           IconButton(
-            icon: Icon(Icons.print,color: Colors.white,),
+            icon: Icon(Icons.print, color: Colors.white),
             onPressed: () {
               _printReceipt(context);
             },
@@ -64,10 +64,7 @@ class ReceiptScreen extends StatelessWidget {
             SizedBox(height: 8),
             Text(
               'Order Receipt',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 8),
             Text(
@@ -116,7 +113,7 @@ class ReceiptScreen extends StatelessWidget {
                 'Tax Reference: ${receipt.taxAuthorityRef}',
                 style: TextStyle(
                   fontSize: 12,
-                  color:TColors.primary,
+                  color: TColors.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -137,46 +134,44 @@ class ReceiptScreen extends StatelessWidget {
           children: [
             Text(
               'Order Items',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 12),
-            ...receipt.order.items.map((item) => Padding(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      '${item.product.name} x${item.quantity}',
-                      style: TextStyle(fontSize: 14),
+            ...receipt.order.items
+                .map(
+                  (item) => Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            '${item.product.name} x${item.quantity}',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            '${TCurrency.ZambiaCurrency} ${item.subtotal.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      '${TCurrency.ZambiaCurrency} ${item.subtotal.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
-                ],
-              ),
-            )).toList(),
+                )
+                .toList(),
             Divider(height: 20),
             Row(
               children: [
                 Expanded(
                   flex: 3,
-                  child: Text(
-                    'Subtotal:',
-                    style: TextStyle(fontSize: 14),
-                  ),
+                  child: Text('Subtotal:', style: TextStyle(fontSize: 14)),
                 ),
                 Expanded(
                   flex: 2,
@@ -203,22 +198,15 @@ class ReceiptScreen extends StatelessWidget {
           children: [
             Text(
               'Payment Summary',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 12),
             _buildSummaryRow('Subtotal:', receipt.order.subtotal),
-            _buildSummaryRow('Tax (16%):', receipt.order.taxAmount),
+            _buildSummaryRow('Tax (12%):', receipt.order.taxAmount),
             if (receipt.order.discountAmount > 0)
               _buildSummaryRow('Discount:', -receipt.order.discountAmount),
             Divider(height: 20),
-            _buildSummaryRow(
-              'TOTAL:',
-              receipt.order.total,
-              isTotal: true,
-            ),
+            _buildSummaryRow('TOTAL:', receipt.order.total, isTotal: true),
           ],
         ),
       ),
@@ -265,7 +253,10 @@ class ReceiptScreen extends StatelessWidget {
             onPressed: () {
               _showReceiptText(context);
             },
-            child: Text('VIEW RECEIPT TEXT', style: TextStyle(fontSize: 16,color: Colors.white)),
+            child: Text(
+              'VIEW RECEIPT TEXT',
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
           ),
         ),
         SizedBox(height: 12),
@@ -279,8 +270,10 @@ class ReceiptScreen extends StatelessWidget {
             onPressed: () {
               Navigator.popUntil(context, (route) => route.isFirst);
             },
-            child: Text('NEW ORDER',
-                style: TextStyle(fontSize: 16, color: TColors.primary)),
+            child: Text(
+              'NEW ORDER',
+              style: TextStyle(fontSize: 16, color: TColors.primary),
+            ),
           ),
         ),
         SizedBox(height: 12),
@@ -290,8 +283,10 @@ class ReceiptScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('BACK TO CART',
-                style: TextStyle(fontSize: 16, color: Colors.grey[600])),
+            child: Text(
+              'BACK TO CART',
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+            ),
           ),
         ),
       ],
@@ -321,16 +316,16 @@ class ReceiptScreen extends StatelessWidget {
 
   void _shareReceipt(BuildContext context) {
     // Simulate sharing functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Receipt shared successfully!')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Receipt shared successfully!')));
   }
 
   void _printReceipt(BuildContext context) {
     // Simulate printing functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Receipt sent to printer!')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Receipt sent to printer!')));
   }
 
   String _formatDate(DateTime date) {

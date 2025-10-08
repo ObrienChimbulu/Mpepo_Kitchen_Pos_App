@@ -15,9 +15,11 @@ class Receipt {
   });
 
   String generateReceiptText() {
-    final itemsText = order.items.map((item) {
-      return '${item.product.name} x${item.quantity} \$${(item.subtotal).toStringAsFixed(2)}';
-    }).join('\n');
+    final itemsText = order.items
+        .map((item) {
+          return '${item.product.name} x${item.quantity} \$${(item.subtotal).toStringAsFixed(2)}';
+        })
+        .join('\n');
 
     return '''
 MPEPO KITCHEN RECEIPT
@@ -28,7 +30,7 @@ ${'-' * 40}
 $itemsText
 ${'-' * 40}
 Subtotal: \$${order.subtotal.toStringAsFixed(2)}
-Tax (16%): \$${order.taxAmount.toStringAsFixed(2)}
+Tax (12%): \$${order.taxAmount.toStringAsFixed(2)}
 ${order.discountAmount > 0 ? 'Discount: \$${order.discountAmount.toStringAsFixed(2)}' : ''}
 TOTAL: \$${order.total.toStringAsFixed(2)}
 ${'-' * 40}
